@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DCG · UE5 — Révisions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #1a1a2e;
+      --cream: #f5f0e8;
+      --gold: #c9a84c;
+      --rust: #c0522a;
+      --sage: #4a7c6f;
+      --paper: #faf7f2;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.5;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 2rem clamp(1.5rem, 6vw, 5rem);
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(26,26,46,0.15);
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+    }
+
+    .tagline {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(26,26,46,0.45);
+      font-weight: 500;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4rem 0 3rem;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+
+    .hero-sub {
+      font-size: 0.8rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rust);
+      font-weight: 500;
+      margin-bottom: 1.2rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: 1.8rem;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--sage);
+    }
+
+    .hero-desc {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: rgba(26,26,46,0.6);
+      max-width: 42ch;
+      font-weight: 300;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      padding: 3rem 0;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .card {
+      position: relative;
+      background: var(--ink);
+      border-radius: 4px;
+      padding: 2.5rem 2rem 2rem;
+      text-decoration: none;
+      color: var(--cream);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 60%, rgba(255,255,255,0.04));
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(26,26,46,0.25);
+    }
+
+    .card:hover .card-arrow { transform: translate(4px, -4px); }
+
+    .card--flash { background: var(--ink); }
+    .card--quiz  { background: var(--ink); }
+    .card--maps  { background: var(--ink); }
+
+    /* Carte inactive — bientôt disponible */
+    .card--inactive {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .card--inactive:hover {
+      transform: none;
+      box-shadow: none;
+    }
+    .card--inactive:hover .card-arrow { transform: none; }
+
+    .badge-soon {
+      display: inline-block;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.6);
+      padding: 0.2rem 0.55rem;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+    }
+
+    .card-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      font-weight: 900;
+      line-height: 1;
+      opacity: 0.08;
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+      letter-spacing: -0.05em;
+    }
+
+    .card-icon {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.9rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      line-height: 1.1;
+    }
+
+    .card-desc {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      opacity: 0.65;
+      font-weight: 300;
+      margin-bottom: 2rem;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      padding-top: 1rem;
+    }
+
+    .card-stat {
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    .card-arrow {
+      font-size: 1.2rem;
+      transition: transform 0.25s ease;
+      opacity: 0.7;
+    }
+
+    footer {
+      border-top: 1px solid rgba(26,26,46,0.1);
+      padding-top: 1.5rem;
+      padding-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      animation: fadeUp 0.9s 0.3s ease both;
+    }
+
+    .footer-text {
+      font-size: 0.75rem;
+      color: rgba(26,26,46,0.35);
+      letter-spacing: 0.05em;
+    }
+
+    .chapter-pills {
+      display: flex;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .pill {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(26,26,46,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      color: rgba(26,26,46,0.4);
+      font-weight: 500;
+    }
+
+    .deco-line {
+      position: fixed;
+      left: clamp(1.5rem, 6vw, 5rem);
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.3) 30%, rgba(201,168,76,0.3) 70%, transparent);
+      pointer-events: none;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 500px) {
+      .chapter-pills { display: none; }
+      h1 { font-size: 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="deco-line"></div>
+
+<div class="page">
+  <header>
+    <span class="logo">DCG · UE5</span>
+    <span class="tagline">Économie — 18 chapitres</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="hero-sub">Espace de révision</p>
+      <h1>Révise.<br><em>Progresse.</em><br>Réussis.</h1>
+      <p class="hero-desc">Trois outils pensés pour aller à l'essentiel — mémoriser, s'entraîner, visualiser. Tout ce qu'il faut pour aborder l'UE5 avec méthode et confiance.</p>
+    </section>
+
+    <div class="cards">
+
+      <!--
+        CORRECTION GITHUB PAGES :
+        Lien absolu "/economie-flashcards" remplacé par l'URL absolue GitHub Pages.
+        Sur dcgnancy.github.io, ce dépôt est servi à cette adresse exacte.
+      -->
+      <a href="https://dcgnancy.github.io/economie-flashcards/" class="card card--flash">
+        <span class="card-number">01</span>
+        <span class="card-icon">🃏</span>
+        <h2 class="card-title">Flash­cards</h2>
+        <p class="card-desc">Mémorisez les définitions, concepts et mécanismes essentiels. Recto-verso, chapitre par chapitre.</p>
+        <div class="card-footer">
+          <span class="card-stat">297 cartes · 18 chapitres</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <!--
+        CORRECTION GITHUB PAGES :
+        Lien absolu "/quizz-revisions-economie" remplacé par l'URL absolue GitHub Pages.
+      -->
+      <a href="https://dcgnancy.github.io/quizz-revisions-economie/" class="card card--quiz">
+        <span class="card-number">02</span>
+        <span class="card-icon">📝</span>
+        <h2 class="card-title">Quiz</h2>
+        <p class="card-desc">Testez vos connaissances avec des questions à choix multiples. Corrigé immédiat et score final.</p>
+        <div class="card-footer">
+          <span class="card-stat">QCM · par chapitre</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <!--
+        LIEN INACTIF : le dépôt "cartes-mentales-economie" n'existe pas encore.
+        La carte est non-cliquable via onclick="return false" + classe card--inactive.
+        Quand le dépôt sera prêt, remplacer href="#" par :
+        https://dcgnancy.github.io/cartes-mentales-economie/
+        et supprimer onclick, card--inactive et le badge badge-soon.
+      -->
+      <a href="#" onclick="return false;" class="card card--maps card--inactive">
+        <span class="card-number">03</span>
+        <span class="card-icon">🗺️</span>
+        <span class="badge-soon">Bientôt disponible</span>
+        <h2 class="card-title">Cartes mentales</h2>
+        <p class="card-desc">Visualisez la structure de chaque chapitre en un coup d'œil. Idéal pour consolider et réviser rapidement.</p>
+        <div class="card-footer">
+          <span class="card-stat">18 cartes · par chapitre</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+    </div>
+  </main>
+
+  <footer>
+    <span class="footer-text">DCG — Unité d'enseignement 5</span>
+    <div class="chapter-pills">
+      <!-- Pastilles chapitres 1–18 -->
+      <div class="pill">1</div><div class="pill">2</div><div class="pill">3</div>
+      <div class="pill">4</div><div class="pill">5</div><div class="pill">6</div>
+      <div class="pill">7</div><div class="pill">8</div><div class="pill">9</div>
+      <div class="pill">10</div><div class="pill">11</div><div class="pill">12</div>
+      <div class="pill">13</div><div class="pill">14</div><div class="pill">15</div>
+      <div class="pill">16</div><div class="pill">17</div><div class="pill">18</div>
+    </div>
+  </footer>
+</div>
+
+</body>
+</html>
