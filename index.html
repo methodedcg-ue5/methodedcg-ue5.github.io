@@ -476,6 +476,56 @@
       h1 { font-size: 2.6rem; }
       .objective-promise { display: none; }
     }
+
+    /* ── Hero compact desktop ── */
+    @media (min-width: 781px) {
+      .hero {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 3rem;
+        padding: 1.4rem 0 0;
+      }
+
+      .hero-left {
+        flex: 0 0 auto;
+        max-width: 44%;
+      }
+
+      .hero-right {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6rem;
+      }
+
+      h1 {
+        font-size: clamp(1.9rem, 3.5vw, 3rem);
+        margin-bottom: 0.3rem;
+        line-height: 1.0;
+      }
+
+      .hero-sub {
+        font-size: 0.72rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .hero-desc {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        max-width: 60ch;
+      }
+
+      .chapter-btn {
+        margin-top: 0.8rem;
+      }
+
+      .parcours-label {
+        margin-top: 1.2rem;
+        margin-bottom: 0.6rem;
+      }
+    }
   </style>
 
 </head>
@@ -504,14 +554,18 @@
 
   <main>
     <section class="hero">
-      <p class="hero-sub">Espace de révision</p>
-      <h1>Réviser.<br><em>Progresser.</em><br>Réussir.</h1>
-      <p class="hero-desc">Trois outils complémentaires pour progresser pas à pas — visualisez d'abord la structure, ancrez les concepts, puis testez-vous. Suivez le parcours pour de meilleurs résultats.</p>
-      <a href="https://methodedcg-ue5.github.io/chapitres.html" class="chapter-btn">
-        <span class="chapter-btn-icon">🔍</span>
-        Retrouve ton chapitre — avant et après réforme
-        <span class="chapter-btn-arrow">↗</span>
-      </a>
+      <div class="hero-left">
+        <p class="hero-sub">Espace de révision</p>
+        <h1>Réviser.<br><em>Progresser.</em><br>Réussir.</h1>
+      </div>
+      <div class="hero-right">
+        <p class="hero-desc">Trois outils complémentaires pour progresser pas à pas — visualisez d'abord la structure, ancrez les concepts, puis testez-vous. Suivez le parcours pour de meilleurs résultats.</p>
+        <a href="https://methodedcg-ue5.github.io/chapitres.html" class="chapter-btn">
+          <span class="chapter-btn-icon">🔍</span>
+          Retrouve ton chapitre — avant et après réforme
+          <span class="chapter-btn-arrow">↗</span>
+        </a>
+      </div>
     </section>
 
     <div class="parcours-label">
