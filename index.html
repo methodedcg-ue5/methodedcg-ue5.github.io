@@ -27,6 +27,7 @@
 
     html, body {
       height: 100%;
+      width: 100%;
       background: var(--paper);
       color: var(--ink);
       font-family: 'DM Sans', sans-serif;
@@ -65,7 +66,7 @@
 
     @media (min-width: 781px) {
       .objective-banner {
-        width: 100vw;
+        width: calc(100% + 2 * clamp(1.5rem, 6vw, 5rem));
         margin-left: calc(-1 * clamp(1.5rem, 6vw, 5rem));
         padding-left: clamp(1.5rem, 6vw, 5rem);
         padding-right: clamp(1.5rem, 6vw, 5rem);
@@ -382,7 +383,7 @@
 
     @media (min-width: 781px) {
       footer {
-        width: 100vw;
+        width: calc(100% + 2 * clamp(1.5rem, 6vw, 5rem));
         margin-left: calc(-1 * clamp(1.5rem, 6vw, 5rem));
         padding-left: clamp(1.5rem, 6vw, 5rem);
         padding-right: clamp(1.5rem, 6vw, 5rem);
