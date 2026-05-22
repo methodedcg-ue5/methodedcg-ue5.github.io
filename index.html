@@ -334,16 +334,23 @@
       footer {
         flex-direction: column;
         align-items: flex-start;
-        gap: 0.4rem;
+        gap: 0.5rem;
         padding-top: 1.1rem;
         padding-bottom: 1.2rem;
       }
 
-      .copyright-text {
+      .footer-copyright {
         font-size: 0.62rem;
-        text-align: left;
-        max-width: 100%;
+        white-space: normal;
         line-height: 1.5;
+      }
+
+      .footer-legal {
+        gap: 0.8rem;
+      }
+
+      .footer-legal a {
+        font-size: 0.61rem;
       }
 
       /* Deco line masquée */
@@ -418,7 +425,7 @@
       }
 
       /* Copyright */
-      .copyright-text { font-size: 0.6rem; }
+      .footer-copyright { font-size: 0.6rem; }
     }
 
     .card {
@@ -575,11 +582,14 @@
     /* ── Footer ── */
     footer {
       border-top: 1px solid rgba(26,26,46,0.1);
-      padding-top: 1.5rem;
-      padding-bottom: 1rem;
+      padding-top: 1.2rem;
+      padding-bottom: 1.2rem;
       display: flex;
-      justify-content: space-between;
+      flex-direction: row;
+      flex-wrap: wrap;          /* wrap intelligent si viewport étroit */
       align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem 1.5rem;       /* row-gap réduit pour le wrap, col-gap normal */
       animation: fadeUp 0.9s 0.35s ease both;
     }
 
@@ -598,13 +608,53 @@
       letter-spacing: 0.05em;
     }
 
+    /* Gauche : copyright — peut wrapper si viewport étroit */
+    .footer-copyright {
+      font-size: 0.68rem;
+      color: rgba(26,26,46,0.35);
+      letter-spacing: 0.02em;
+      line-height: 1.5;
+      /* Pas de nowrap ni flex-shrink:0 :
+         le bloc peut se réduire sans provoquer de débordement */
+    }
+
+    /* Droite : liens légaux */
+    .footer-legal {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      flex-shrink: 1;  /* autorisé à rétrécir */
+      min-width: 0;    /* évite le débordement hors du flex parent */
+    }
+
+    .footer-legal a {
+      font-size: 0.65rem;
+      color: rgba(26,26,46,0.3);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 500;
+      /* Pas de nowrap forcé : les libellés sont courts,
+         ils tiennent naturellement sur une ligne */
+      transition: color 0.2s ease;
+    }
+
+    .footer-legal a:hover {
+      color: rgba(26,26,46,0.6);
+    }
+
+    .footer-legal-sep {
+      font-size: 0.6rem;
+      color: rgba(26,26,46,0.18);
+      user-select: none;
+    }
+
+    /* Ancienne classe conservée pour compatibilité (inutilisée désormais) */
     .copyright-text {
       font-size: 0.68rem;
       color: rgba(26,26,46,0.35);
       letter-spacing: 0.02em;
       line-height: 1.6;
-      max-width: 70ch;
-      text-align: right;
     }
 
     .chapter-btn {
@@ -833,7 +883,12 @@
   </main>
 
   <footer>
-    <p class="copyright-text">© 2026 – Marie Duval – Tous droits réservés.<br>L'ensemble des contenus présents sur ce site (textes, quiz, exercices, structure pédagogique, méthodes) est protégé par le droit d'auteur conformément au Code de la propriété intellectuelle. Toute reproduction, représentation, modification, publication ou adaptation, totale ou partielle, quel que soit le procédé, est interdite sans autorisation préalable.</p>
+    <span class="footer-copyright">© 2026 — Méthode DCG UE5 — Tous droits réservés.</span>
+    <nav class="footer-legal" aria-label="Liens légaux">
+      <a href="mentions-legales.html">Mentions légales</a>
+      <span class="footer-legal-sep" aria-hidden="true">—</span>
+      <a href="politique-de-confidentialite.html">Politique de confidentialité</a>
+    </nav>
   </footer>
 </div>
 
