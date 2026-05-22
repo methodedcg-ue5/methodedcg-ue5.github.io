@@ -115,10 +115,20 @@
     header {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
+      align-items: center;
       padding: 1.6rem 0 1.6rem;
       border-bottom: 1px solid rgba(26,26,46,0.15);
       animation: fadeUp 0.6s 0.1s ease both;
+      gap: 1rem;
+      min-width: 0;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-shrink: 0;
+      min-width: 0;
     }
 
     .logo {
@@ -237,34 +247,41 @@
         white-space: nowrap;
       }
 
-      /* Header : deux lignes propres */
+      /* Header : une ligne, logo + groupe droit compact */
       header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-        padding: 0.9rem 0 0.9rem;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.85rem 0;
       }
 
-      .logo { font-size: 0.92rem; }
+      .logo {
+        font-size: 0.88rem;
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
 
-      header > div {
-        display: flex !important;
-        align-items: center;
-        gap: 0.75rem;
-        width: 100%;
-        flex-wrap: wrap;
+      .header-right {
+        gap: 0.7rem;
+        flex-shrink: 0;
       }
 
       .tagline {
-        font-size: 0.66rem;
-        letter-spacing: 0.08em;
+        font-size: 0.63rem;
+        letter-spacing: 0.07em;
       }
 
+      /* Bascule long → court */
+      .contact-btn-long { display: none; }
+      .contact-btn-short { display: inline; }
+
       .contact-btn {
-        font-size: 0.65rem;
+        font-size: 0.63rem;
         padding: 0.28rem 0.6rem;
         letter-spacing: 0.04em;
-        gap: 0.3rem;
       }
 
       /* Hero compact */
@@ -351,15 +368,17 @@
       .objective-promise { display: none; }
 
       /* Header */
-      header { padding: 0.85rem 0; gap: 0.4rem; }
+      header { padding: 0.8rem 0; gap: 0.5rem; }
 
-      .logo { font-size: 0.88rem; }
+      .logo { font-size: 0.84rem; }
 
-      .tagline { font-size: 0.63rem; }
+      .tagline { display: none; }
+
+      .header-right { gap: 0; }
 
       .contact-btn {
-        font-size: 0.62rem;
-        padding: 0.25rem 0.55rem;
+        font-size: 0.6rem;
+        padding: 0.25rem 0.5rem;
       }
 
       /* Hero */
@@ -629,17 +648,23 @@
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 500;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       color: var(--gold);
       text-decoration: none;
       border: 1px solid rgba(201,168,76,0.35);
       border-radius: 3px;
-      padding: 0.4rem 0.9rem;
+      padding: 0.38rem 0.85rem;
       transition: background 0.2s ease, border-color 0.2s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
+
+    /* Version longue visible par défaut, courte masquée */
+    .contact-btn-long { display: inline; }
+    .contact-btn-short { display: none; }
 
     .contact-btn:hover {
       background: rgba(201,168,76,0.08);
@@ -726,9 +751,12 @@
 
   <header>
     <span class="logo">Objectif : Valider l'UE5 du DCG !</span>
-    <div style="display:flex;align-items:baseline;gap:2rem;">
+    <div class="header-right">
       <span class="tagline">Économie — 18 chapitres</span>
-      <a href="contact.html" class="contact-btn">✉ Besoin d'aide ? Contactez-moi</a>
+      <a href="contact.html" class="contact-btn">
+        <span class="contact-btn-long">✉ Besoin d'aide ? Contactez-moi</span>
+        <span class="contact-btn-short">✉ Contact</span>
+      </a>
     </div>
   </header>
 
