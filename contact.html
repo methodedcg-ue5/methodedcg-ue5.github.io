@@ -669,7 +669,7 @@
           <!-- Mentions RGPD -->
           <p class="rgpd-mentions">
             Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et de suppression
-            de vos données. Pour exercer ces droits, contactez : profecomanagestion@gmail.com.
+            de vos données. Pour exercer ces droits, contactez : <a id="contact-mail" href="#" style="color:rgba(245,240,232,0.3);text-decoration:underline;text-underline-offset:2px;"></a>.
             Les données collectées (nom, email, message) sont utilisées uniquement pour répondre
             à votre demande et ne sont jamais transmises à des tiers.
           </p>
@@ -797,5 +797,18 @@ form.addEventListener('submit', async function(e) {
   formspree('initForm', { formElement: '#contactForm', formId: 'mgoqakqo' });
 </script>
 <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+
+<script>
+/* Anti-spam : adresse mail reconstruite en JS, invisible aux bots */
+(function() {
+  var u = 'contact';
+  var d = 'methodedcg-ue5.fr';
+  var el = document.getElementById('contact-mail');
+  if (el) {
+    el.href = 'mailto:' + u + '@' + d;
+    el.textContent = u + '@' + d;
+  }
+})();
+</script>
 </body>
 </html>
