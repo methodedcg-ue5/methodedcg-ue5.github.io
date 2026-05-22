@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F51TDGR55K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-F51TDGR55K');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mentions légales — Méthode DCG UE5</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #1a1a2e;
+      --cream: #f5f0e8;
+      --gold: #c9a84c;
+      --rust: #c0522a;
+      --sage: #4a7c6f;
+      --paper: #faf7f2;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.5;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      width: 100%;
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 clamp(1.5rem, 5vw, 4rem);
+    }
+
+    /* ── Bandeau ── */
+    .objective-banner {
+      background: var(--ink);
+      color: var(--cream);
+      padding: 0.55rem clamp(1.5rem, 5vw, 4rem);
+      margin: 0 calc(-1 * clamp(1.5rem, 5vw, 4rem));
+      width: calc(100% + 2 * clamp(1.5rem, 5vw, 4rem));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      animation: fadeDown 0.5s ease both;
+    }
+    .objective-left { display: flex; align-items: center; gap: 1rem; }
+    .objective-badge {
+      background: var(--gold);
+      color: var(--ink);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      border-radius: 2px;
+      white-space: nowrap;
+    }
+    .objective-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+    .objective-promise {
+      font-size: 0.72rem;
+      color: var(--gold);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-align: right;
+      opacity: 0.9;
+    }
+    .objective-promise strong { color: #fff; font-weight: 700; }
+
+    /* ── Header ── */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.4rem 0;
+      border-bottom: 1px solid rgba(26,26,46,0.15);
+      animation: fadeUp 0.6s 0.1s ease both;
+      gap: 1.5rem;
+      width: 100%;
+      min-width: 0;
+    }
+    .header-right { display: flex; align-items: center; gap: 1.5rem; flex-shrink: 0; }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      text-decoration: none;
+    }
+    .tagline {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(26,26,46,0.45);
+      font-weight: 500;
+    }
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.76rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      border: 1px solid rgba(201,168,76,0.35);
+      border-radius: 3px;
+      padding: 0.38rem 0.85rem;
+      transition: background 0.2s ease, border-color 0.2s ease;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .contact-btn:hover { background: rgba(201,168,76,0.08); border-color: rgba(201,168,76,0.65); }
+    .contact-btn-long { display: inline; }
+    .contact-btn-short { display: none; }
+
+    /* ── Contenu légal ── */
+    main {
+      padding: 3rem 0 3.5rem;
+      animation: fadeUp 0.7s 0.15s ease both;
+    }
+
+    .legal-header {
+      margin-bottom: 3rem;
+    }
+
+    .legal-breadcrumb {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--rust);
+      font-weight: 500;
+      margin-bottom: 0.8rem;
+    }
+
+    .legal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.05;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+
+    .legal-body {
+      max-width: 72ch;
+    }
+
+    .legal-section {
+      margin-bottom: 2.8rem;
+    }
+
+    .legal-section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(26,26,46,0.1);
+    }
+
+    .legal-section p {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: rgba(26,26,46,0.75);
+      font-weight: 300;
+      margin-bottom: 0.75rem;
+    }
+
+    .legal-section p:last-child { margin-bottom: 0; }
+
+    .legal-section a {
+      color: var(--sage);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(74,124,111,0.3);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+    .legal-section a:hover {
+      color: var(--ink);
+      border-color: rgba(26,26,46,0.4);
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid rgba(26,26,46,0.1);
+      padding-top: 1.2rem;
+      padding-bottom: 1.2rem;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem 1.5rem;
+      animation: fadeUp 0.9s 0.35s ease both;
+    }
+    @media (min-width: 781px) {
+      footer {
+        width: calc(100% + 2 * clamp(1.5rem, 5vw, 4rem));
+        margin-left: calc(-1 * clamp(1.5rem, 5vw, 4rem));
+        padding-left: clamp(1.5rem, 5vw, 4rem);
+        padding-right: clamp(1.5rem, 5vw, 4rem);
+      }
+    }
+    .footer-copyright {
+      font-size: 0.68rem;
+      color: rgba(26,26,46,0.35);
+      letter-spacing: 0.02em;
+      line-height: 1.5;
+    }
+    .footer-legal {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      flex-shrink: 1;
+      min-width: 0;
+    }
+    .footer-legal a {
+      font-size: 0.65rem;
+      color: rgba(26,26,46,0.3);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+    .footer-legal a:hover { color: rgba(26,26,46,0.6); }
+    .footer-legal a[aria-current="page"] {
+      color: rgba(26,26,46,0.6);
+      font-weight: 700;
+    }
+    .footer-legal-sep {
+      font-size: 0.6rem;
+      color: rgba(26,26,46,0.18);
+      user-select: none;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 780px) {
+      .page { padding: 0 1.25rem; }
+      .objective-banner { padding: 0.4rem 1.25rem; }
+      .objective-promise { font-size: 0.64rem; white-space: nowrap; }
+      .objective-badge { font-size: 0.6rem; padding: 0.2rem 0.5rem; }
+      .objective-title { font-size: 0.78rem; }
+      header { padding: 0.85rem 0; gap: 0.6rem; }
+      .logo { font-size: 0.88rem; }
+      .tagline { font-size: 0.63rem; }
+      .contact-btn-long { display: none; }
+      .contact-btn-short { display: inline; }
+      .contact-btn { font-size: 0.63rem; padding: 0.28rem 0.6rem; }
+      main { padding: 2rem 0 2.5rem; }
+      footer { flex-direction: column; align-items: flex-start; gap: 0.5rem; padding-top: 1.1rem; padding-bottom: 1.2rem; }
+      .footer-copyright { font-size: 0.62rem; }
+      .footer-legal { gap: 0.8rem; }
+      .footer-legal a { font-size: 0.61rem; }
+    }
+    @media (max-width: 480px) {
+      .page { padding: 0 1rem; }
+      .objective-promise { display: none; }
+      header { padding: 0.8rem 0; }
+      .logo { font-size: 0.84rem; }
+      .tagline { display: none; }
+      .contact-btn { font-size: 0.6rem; padding: 0.25rem 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- Bandeau -->
+  <div class="objective-banner">
+    <div class="objective-left">
+      <span class="objective-badge">Méthode DCG</span>
+      <span class="objective-title">UE 5 — Économie</span>
+    </div>
+    <span class="objective-promise">Gagnez jusqu'à <strong>+4 points</strong> au-dessus de la moyenne nationale à l'épreuve</span>
+  </div>
+
+  <header>
+    <a href="index.html" class="logo">Objectif : Valider l'UE5 du DCG !</a>
+    <div class="header-right">
+      <span class="tagline">Économie — 18 chapitres</span>
+      <a href="contact.html" class="contact-btn">
+        <span class="contact-btn-long">✉ Besoin d'aide ? Contactez-moi</span>
+        <span class="contact-btn-short">✉ Contact</span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <div class="legal-header">
+      <p class="legal-breadcrumb">Informations légales</p>
+      <h1 class="legal-title">Mentions légales</h1>
+    </div>
+
+    <div class="legal-body">
+
+      <div class="legal-section">
+        <h2>Éditeur du site</h2>
+        <p>Le présent site accessible à l'adresse <a href="https://methodedcg-ue5.fr">https://methodedcg-ue5.fr</a> est édité par :</p>
+        <p>Marie Duval — Enseignante et créatrice de contenus pédagogiques.</p>
+        <p>Directrice de la publication : Marie Duval</p>
+        <p>Adresse e-mail de contact : <a href="mailto:contact@methodedcg-ue5.fr">contact@methodedcg-ue5.fr</a></p>
+      </div>
+
+      <div class="legal-section">
+        <h2>Hébergement</h2>
+        <p>Le site est hébergé par GitHub Pages — GitHub Inc., 88 Colin P. Kelly Jr St, San Francisco, CA 94107, États-Unis. Site web : <a href="https://pages.github.com/" target="_blank" rel="noopener">https://pages.github.com/</a></p>
+        <p>Nom de domaine enregistré auprès de Infomaniak Network SA, Rue Eugène-Marziano 25, 1227 Les Acacias (Genève), Suisse. Site web : <a href="https://www.infomaniak.com/" target="_blank" rel="noopener">https://www.infomaniak.com/</a></p>
+      </div>
+
+      <div class="legal-section">
+        <h2>Propriété intellectuelle</h2>
+        <p>L'ensemble des contenus présents sur le site Méthode DCG UE5, incluant notamment les textes, cours, méthodologies, documents pédagogiques, visuels, logos, éléments graphiques, illustrations, fichiers téléchargeables, structure du site et éléments de conception, est protégé par le Code de la propriété intellectuelle.</p>
+        <p>Ces contenus font l'objet d'une protection au titre du droit d'auteur et constituent la propriété exclusive de Marie Duval. Une Enveloppe Soleau a été déposée auprès de l'INPI à titre de précaution probatoire, sans que ce dépôt ne confère de droit supplémentaire au-delà de ceux résultant de la création originale.</p>
+        <p>Toute reproduction, représentation, diffusion, adaptation, traduction, extraction, réutilisation ou exploitation, totale ou partielle, par quelque procédé que ce soit, sans autorisation écrite préalable, est strictement interdite et pourra donner lieu à des poursuites civiles et/ou pénales.</p>
+        <p>L'utilisation des contenus est exclusivement réservée à un usage personnel, privé et pédagogique. Toute utilisation à des fins commerciales, de republication, de revente, de diffusion sur une plateforme tierce, d'entraînement de modèles d'intelligence artificielle, d'agrégation documentaire ou de création de contenus dérivés est interdite sans autorisation écrite préalable.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2>Sous-traitant — Formulaire de contact</h2>
+        <p>Les formulaires de contact sont traités via Formspree (Formspree Inc.), prestataire tiers constituant un sous-traitant au sens du RGPD. Ce service peut héberger des données hors de l'Union européenne, dans le cadre de garanties appropriées telles que les clauses contractuelles types adoptées par la Commission européenne.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2>Responsabilité</h2>
+        <p>Les informations publiées sur le site sont fournies à titre informatif et pédagogique. Malgré le soin apporté à la rédaction et à la mise à jour des contenus, l'éditrice ne peut garantir l'absence d'erreurs, d'omissions ou d'évolutions réglementaires postérieures à leur publication.</p>
+        <p>L'utilisateur demeure seul responsable de l'usage qu'il fait des informations diffusées. L'éditrice ne saurait être tenue responsable de dommages directs ou indirects résultant de l'accès au site ou de l'impossibilité de l'utiliser.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2>Liens hypertextes</h2>
+        <p>Le site peut contenir des liens vers des sites tiers. L'éditrice ne saurait être tenue responsable du contenu, des politiques ou des pratiques de ces sites externes.</p>
+      </div>
+
+      <div class="legal-section">
+        <h2>Droit applicable</h2>
+        <p>Le présent site et les présentes mentions légales sont soumis au droit français. Tout litige relèvera de la compétence des juridictions françaises.</p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <span class="footer-copyright">© 2026 — Méthode DCG UE5 — Tous droits réservés.</span>
+    <nav class="footer-legal" aria-label="Liens légaux">
+      <a href="mentions-legales.html" aria-current="page">Mentions légales</a>
+      <span class="footer-legal-sep" aria-hidden="true">—</span>
+      <a href="politique-de-confidentialite.html">Politique de confidentialité</a>
+      <span class="footer-legal-sep" aria-hidden="true">—</span>
+      <a href="cgu.html">CGU</a>
+    </nav>
+  </footer>
+
+</div>
+</body>
+</html>
