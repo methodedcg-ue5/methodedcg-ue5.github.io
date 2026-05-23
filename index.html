@@ -232,6 +232,77 @@
       animation: fadeUp 0.8s 0.25s ease both;
     }
 
+    /* ── Cards méthode (plus compactes, même style) ── */
+    .cards-methode {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      padding-bottom: 0;
+      margin-bottom: 0;
+      animation: fadeUp 0.75s 0.2s ease both;
+    }
+
+    .card-sm {
+      position: relative;
+      background: var(--ink);
+      border-radius: 4px;
+      padding: 1.4rem 1.4rem 1.2rem;
+      text-decoration: none;
+      color: var(--cream);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-sm::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 60%, rgba(255,255,255,0.04));
+    }
+
+    .card-sm:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 38px rgba(26,26,46,0.22);
+    }
+
+    .card-sm:hover .card-arrow { transform: translate(4px, -4px); }
+
+    .card-sm-tag {
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.55rem;
+      border-radius: 2px;
+      align-self: flex-start;
+      margin-bottom: 0.7rem;
+    }
+
+    .tag-gold { background: var(--gold); color: var(--ink); }
+    .tag-sage { background: rgba(74,124,111,0.28); color: #7bbdae; }
+    .tag-rust { background: rgba(192,82,42,0.22); color: #e07a56; }
+
+    .card-sm-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+
+    .card-sm-desc {
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: rgba(245,240,232,0.55);
+      font-weight: 300;
+      flex: 1;
+      margin-bottom: 0.9rem;
+    }
+
     /* ── TABLETTE & MOBILE : ≤ 780px ── */
     @media (max-width: 780px) {
 
@@ -340,6 +411,11 @@
         padding-bottom: 1.8rem;
       }
 
+      .cards-methode {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+
       .flow-arrow { display: none; }
 
       /* Footer */
@@ -435,6 +511,8 @@
         gap: 0.75rem;
         padding-bottom: 1.5rem;
       }
+
+      .cards-methode { gap: 0.65rem; }
 
       /* Copyright */
       .footer-copyright { font-size: 0.6rem; }
@@ -802,6 +880,14 @@
         margin-top: 1.2rem;
         margin-bottom: 0.6rem;
       }
+
+      .parcours-label + .cards-methode {
+        margin-top: 0;
+      }
+
+      .cards-methode + .parcours-label {
+        margin-top: 2rem;
+      }
     }
 
     /* ── Bannière cookies ── */
@@ -901,6 +987,47 @@
         </a>
       </div>
     </section>
+
+    <div class="parcours-label">
+      <span>Méthode &amp; épreuve</span>
+    </div>
+
+    <div class="cards-methode">
+
+      <!-- Épreuve UE5 DCG -->
+      <a href="epreuve-ue5-dcg.html" class="card-sm">
+        <span class="card-sm-tag tag-gold">Épreuve</span>
+        <h2 class="card-sm-title">L'épreuve UE5 DCG</h2>
+        <p class="card-sm-desc">Format, coefficient, barème — tout ce que l'examinateur attend pour la session 2027.</p>
+        <div class="card-footer">
+          <span class="card-stat">Session 2027</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <!-- Méthodologie dossier documentaire -->
+      <a href="dossier-documentaire-ue5-dcg.html" class="card-sm">
+        <span class="card-sm-tag tag-sage">Partie 1</span>
+        <h2 class="card-sm-title">Méthodologie DCG UE5 : dossier documentaire</h2>
+        <p class="card-sm-desc">Analyser les documents, repérer les idées clés, structurer une réponse argumentée.</p>
+        <div class="card-footer">
+          <span class="card-stat">Économie UE5 DCG</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <!-- Méthodologie question problématisée -->
+      <a href="question-problematisee-dcg-ue5.html" class="card-sm">
+        <span class="card-sm-tag tag-rust">Partie 2</span>
+        <h2 class="card-sm-title">Méthodologie DCG UE5 : question problématisée</h2>
+        <p class="card-sm-desc">Construire une problématique, rédiger le plan, maîtriser l'introduction et la conclusion.</p>
+        <div class="card-footer">
+          <span class="card-stat">Dissertation économie UE5</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+    </div>
 
     <div class="parcours-label">
       <span>Parcours conseillé</span>
