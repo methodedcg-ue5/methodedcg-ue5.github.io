@@ -42,9 +42,11 @@
       background: var(--paper);
       color: var(--ink);
       font-family: 'DM Sans', sans-serif;
-      /* clip plutôt que hidden : ne crée pas de contexte de scroll sur iOS Safari */
-      overflow-x: clip;
+      /* hidden : support universel Safari iOS toutes versions */
+      overflow-x: hidden;
     }
+    /* Sécurité globale : aucun élément ne peut dépasser la largeur du viewport */
+    html { max-width: 100%; }
 
     /* Texture de fond subtile */
     body::before {
@@ -64,26 +66,30 @@
       grid-template-rows: auto auto 1fr auto;
       width: 100%;
       max-width: 1280px;
+      /* Sécurité Safari iOS : jamais plus large que le viewport */
+      min-width: 0;
       margin-left: auto;
       margin-right: auto;
       padding: 0 clamp(1.5rem, 5vw, 4rem);
       box-sizing: border-box;
+      /* Contient les overflows de ses enfants */
+      overflow-x: hidden;
     }
 
     /* ── Bandeau objectif — pleine largeur, hors container ── */
     .objective-banner {
       background: var(--ink);
       color: var(--cream);
-      /* Padding horizontal calé sur le container pour aligner visuellement */
       padding: 0.55rem clamp(1.5rem, 5vw, 4rem);
-      /* Pleine largeur naturelle — aucun calc, aucune marge négative */
+      /* Triple protection largeur — robuste même en zoom Safari iOS */
       width: 100%;
+      max-width: 100%;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
       animation: fadeDown 0.5s ease both;
-      /* Empêche tout overflow sur iOS Safari */
       box-sizing: border-box;
     }
 
@@ -170,7 +176,11 @@
       justify-content: center;
       padding: 1.6rem 0 0;
       animation: fadeUp 0.7s 0.15s ease both;
+      /* Contient ses flex children */
+      min-width: 0;
     }
+    /* min-width: 0 sur les deux colonnes hero — protection flex overflow */
+    .hero-left, .hero-right { min-width: 0; }
 
     .hero-sub {
       font-size: 0.72rem;
@@ -185,15 +195,31 @@
       font-family: 'Playfair Display', serif;
       font-size: clamp(2rem, 5vw, 3.6rem);
       font-weight: 900;
-      line-height: 0.97;
+      /* line-height légèrement plus ouvert pour accueillir deux lignes */
+      line-height: 1.0;
       letter-spacing: -0.02em;
       color: var(--ink);
       margin-bottom: 0.4rem;
+      /* empêche tout débordement horizontal sur mobile */
+      overflow-wrap: break-word;
     }
 
     h1 em {
       font-style: italic;
       color: var(--sage);
+    }
+
+    /* Ligne 2 du H1 — sous-titre sémantique, taille réduite */
+    .h1-sub {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1rem, 2.2vw, 1.45rem);
+      font-weight: 700;
+      font-style: italic;
+      line-height: 1.2;
+      color: rgba(26,26,46,0.42);
+      letter-spacing: -0.01em;
+      margin-top: 0.45rem;
     }
 
     .hero-desc {
@@ -475,6 +501,9 @@
       font-weight: 500;
       letter-spacing: 0.03em;
       transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+      /* Jamais plus large que son parent */
+      max-width: 100%;
+      box-sizing: border-box;
     }
 
     .chapter-btn:hover {
@@ -610,6 +639,10 @@
         line-height: 1.0;
         margin-bottom: 0.25rem;
       }
+      .h1-sub {
+        font-size: clamp(0.9rem, 1.6vw, 1.2rem);
+        margin-top: 0.35rem;
+      }
 
       .hero-sub { margin-bottom: 0.4rem; }
 
@@ -685,7 +718,8 @@
       /* Hero */
       .hero { padding: 1rem 0 0; flex-direction: column; }
       .hero-sub { font-size: 0.68rem; margin-bottom: 0.4rem; }
-      h1 { font-size: clamp(1.75rem, 8vw, 2.5rem); line-height: 0.97; }
+      h1 { font-size: clamp(1.6rem, 7.5vw, 2.3rem); line-height: 1.0; overflow-wrap: break-word; }
+      .h1-sub { font-size: clamp(0.88rem, 3.5vw, 1.1rem); margin-top: 0.3rem; }
       .hero-desc { font-size: 0.82rem; margin-top: 0.4rem; max-width: 100%; }
       .chapter-btn { margin-top: 0.8rem; font-size: 0.76rem; padding: 0.5rem 0.9rem; }
 
@@ -805,7 +839,8 @@
 
       /* ── Hero ── */
       .hero { padding: 0.85rem 0 0; gap: 0; }
-      h1 { font-size: clamp(1.6rem, 9vw, 2.1rem); line-height: 0.97; }
+      h1 { font-size: clamp(1.45rem, 8.5vw, 1.9rem); line-height: 1.02; overflow-wrap: break-word; }
+      .h1-sub { font-size: clamp(0.82rem, 3.8vw, 1rem); margin-top: 0.28rem; letter-spacing: 0; }
       .hero-desc { font-size: 0.78rem; line-height: 1.55; margin-top: 0.35rem; max-width: 100%; }
       .chapter-btn {
         margin-top: 0.7rem;
@@ -872,12 +907,11 @@
         margin-bottom: 0;
         line-height: 1.15;
         min-width: 0;
-        /* Prend tout l'espace horizontal restant, sans déborder */
         flex: 1;
-        /* Empêche un titre très long de faire déborder la carte */
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        /* Retour à la ligne propre plutôt que nowrap — future-proof */
+        overflow-wrap: break-word;
+        word-break: break-word;
+        /* Pas de white-space: nowrap — un titre long ne déborde plus */
       }
 
       /* Description — flex-basis:100% la force sur une nouvelle ligne */
@@ -940,6 +974,11 @@
       border-top: 2px solid var(--gold);
       transform: translateY(110%);
       transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+      /* Sécurité Safari iOS : fixed + clamp peut déborder */
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+      box-sizing: border-box;
     }
     #cookie-banner.visible { transform: translateY(0); }
     .cookie-text { flex: 1; min-width: 0; }
@@ -997,7 +1036,7 @@
 <div class="page">
 
   <header>
-    <span class="logo">Objectif : Valider l'UE5 du DCG !</span>
+    <span class="logo">Objectif : Réussir l'UE5 du DCG !</span>
     <div class="header-right">
       <span class="tagline">Économie — 18 chapitres</span>
       <a href="about.html" class="nav-link">Qui suis-je ?</a>
@@ -1013,11 +1052,11 @@
     <!-- Hero compact -->
     <section class="hero">
       <div class="hero-left">
-        <p class="hero-sub">Espace de révision</p>
-        <h1>Réviser.<br><em>Progresser.</em><br>Réussir.</h1>
+        <p class="hero-sub">DCG · Économie contemporaine</p>
+        <h1>Méthode <em>DCG UE5</em><span class="h1-sub">Réviser, progresser puis réussir l'épreuve d'économie contemporaine</span></h1>
       </div>
       <div class="hero-right">
-        <p class="hero-desc">Trois outils complémentaires pour progresser pas à pas — visualisez d'abord la structure, ancrez les concepts, puis testez-vous. Suivez le parcours pour de meilleurs résultats.</p>
+        <p class="hero-desc">Maîtrisez la méthodologie de l'épreuve UE5 — dossier documentaire et question problématisée — puis renforcez vos connaissances avec les outils de révision. Un parcours structuré pour progresser efficacement et réussir l'épreuve d'économie du DCG.</p>
         <a href="https://methodedcg-ue5.github.io/chapitres.html" class="chapter-btn">
           <span class="chapter-btn-icon">🔍</span>
           Retrouve ton chapitre — avant et après réforme
@@ -1026,9 +1065,42 @@
       </div>
     </section>
 
-    <!-- ① OUTILS PRINCIPAUX — priorité visuelle absolue -->
+    <!-- ① MÉTHODE & ÉPREUVE — point d'entrée pédagogique -->
     <div class="section-label">
-      <span>Parcours conseillé</span>
+      <span>Méthode &amp; épreuve</span>
+    </div>
+
+    <div class="methode-strip">
+
+      <a href="epreuve-ue5-dcg.html" class="methode-item">
+        <div class="methode-item-left">
+          <span class="methode-tag tag-gold">Épreuve</span>
+          <span class="methode-title">L'épreuve UE5 DCG — format de la nouvelle épreuve</span>
+        </div>
+        <span class="methode-arrow">↗</span>
+      </a>
+
+      <a href="dossier-documentaire-ue5-dcg.html" class="methode-item">
+        <div class="methode-item-left">
+          <span class="methode-tag tag-sage">Partie 1</span>
+          <span class="methode-title">Méthodologie — dossier documentaire</span>
+        </div>
+        <span class="methode-arrow">↗</span>
+      </a>
+
+      <a href="question-problematisee-dcg-ue5.html" class="methode-item">
+        <div class="methode-item-left">
+          <span class="methode-tag tag-rust">Partie 2</span>
+          <span class="methode-title">Méthodologie — question problématisée</span>
+        </div>
+        <span class="methode-arrow">↗</span>
+      </a>
+
+    </div>
+
+    <!-- ② OUTILS DE RÉVISION — renforcement des connaissances -->
+    <div class="section-label">
+      <span>Outils de révision</span>
     </div>
 
     <div class="cards">
@@ -1094,39 +1166,6 @@
           <span class="card-stat">QCM · 18 chapitres</span>
           <span class="card-arrow">↗</span>
         </div>
-      </a>
-
-    </div>
-
-    <!-- ② MÉTHODE & ÉPREUVE — bandeau discret, secondaire -->
-    <div class="section-label">
-      <span>Méthode &amp; épreuve</span>
-    </div>
-
-    <div class="methode-strip">
-
-      <a href="epreuve-ue5-dcg.html" class="methode-item">
-        <div class="methode-item-left">
-          <span class="methode-tag tag-gold">Épreuve</span>
-          <span class="methode-title">L'épreuve UE5 DCG — Format, coefficient, barème</span>
-        </div>
-        <span class="methode-arrow">↗</span>
-      </a>
-
-      <a href="dossier-documentaire-ue5-dcg.html" class="methode-item">
-        <div class="methode-item-left">
-          <span class="methode-tag tag-sage">Partie 1</span>
-          <span class="methode-title">Méthodologie — dossier documentaire</span>
-        </div>
-        <span class="methode-arrow">↗</span>
-      </a>
-
-      <a href="question-problematisee-dcg-ue5.html" class="methode-item">
-        <div class="methode-item-left">
-          <span class="methode-tag tag-rust">Partie 2</span>
-          <span class="methode-title">Méthodologie — question problématisée</span>
-        </div>
-        <span class="methode-arrow">↗</span>
       </a>
 
     </div>
