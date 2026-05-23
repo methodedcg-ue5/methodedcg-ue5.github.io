@@ -42,7 +42,8 @@
       background: var(--paper);
       color: var(--ink);
       font-family: 'DM Sans', sans-serif;
-      overflow-x: hidden;
+      /* clip plutôt que hidden : ne crée pas de contexte de scroll sur iOS Safari */
+      overflow-x: clip;
     }
 
     /* Texture de fond subtile */
@@ -69,18 +70,21 @@
       box-sizing: border-box;
     }
 
-    /* ── Bandeau objectif ── */
+    /* ── Bandeau objectif — pleine largeur, hors container ── */
     .objective-banner {
       background: var(--ink);
       color: var(--cream);
+      /* Padding horizontal calé sur le container pour aligner visuellement */
       padding: 0.55rem clamp(1.5rem, 5vw, 4rem);
-      margin: 0 calc(-1 * clamp(1.5rem, 5vw, 4rem));
-      width: calc(100% + 2 * clamp(1.5rem, 5vw, 4rem));
+      /* Pleine largeur naturelle — aucun calc, aucune marge négative */
+      width: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
       animation: fadeDown 0.5s ease both;
+      /* Empêche tout overflow sur iOS Safari */
+      box-sizing: border-box;
     }
 
     .objective-left {
@@ -526,11 +530,9 @@
     }
 
     @media (min-width: 781px) {
+      /* Footer desktop : largeur naturelle, pas de marges négatives */
       footer {
-        width: calc(100% + 2 * clamp(1.5rem, 5vw, 4rem));
-        margin-left: calc(-1 * clamp(1.5rem, 5vw, 4rem));
-        padding-left: clamp(1.5rem, 5vw, 4rem);
-        padding-right: clamp(1.5rem, 5vw, 4rem);
+        width: 100%;
       }
     }
 
@@ -648,12 +650,10 @@
     @media (max-width: 780px) {
       .page { padding: 0 1.25rem; }
 
-      /* Bandeau compact */
+      /* Bandeau compact — hors container, ajuste juste le padding */
       .objective-banner {
         padding: 0.4rem 1.25rem;
         gap: 0.5rem;
-        margin: 0 -1.25rem;
-        width: calc(100% + 2.5rem);
       }
       .objective-left { gap: 0.55rem; }
       .objective-badge { font-size: 0.6rem; padding: 0.2rem 0.5rem; }
@@ -771,19 +771,18 @@
     }
 
     /* ══════════════════════════════════════════════════════
-       MOBILE : ≤ 480px — refonte responsive premium
+       MOBILE : ≤ 480px — layout premium, zéro overflow
     ══════════════════════════════════════════════════════ */
     @media (max-width: 480px) {
 
       /* ── Layout ── */
       .page { padding: 0 0.9rem; }
 
-      /* Bandeau : négatif margin aligné sur le padding page, sans calc overflow */
+      /* Bandeau : hors .page, ajuste uniquement le padding horizontal */
       .objective-banner {
-        margin: 0 -0.9rem;
-        width: calc(100% + 1.8rem);
-        padding: 0.4rem 0.9rem;
+        padding: 0.38rem 0.9rem;
         gap: 0.4rem;
+        /* Pas de width/margin : déjà 100% naturellement */
       }
       .objective-badge { font-size: 0.56rem; padding: 0.18rem 0.45rem; }
       .objective-title { font-size: 0.72rem; }
@@ -807,14 +806,13 @@
       /* ── Hero ── */
       .hero { padding: 0.85rem 0 0; gap: 0; }
       h1 { font-size: clamp(1.6rem, 9vw, 2.1rem); line-height: 0.97; }
-      .hero-desc { font-size: 0.78rem; line-height: 1.55; margin-top: 0.35rem; }
+      .hero-desc { font-size: 0.78rem; line-height: 1.55; margin-top: 0.35rem; max-width: 100%; }
       .chapter-btn {
         margin-top: 0.7rem;
         font-size: 0.71rem;
         padding: 0.45rem 0.8rem;
         width: 100%;
         justify-content: center;
-        box-sizing: border-box;
       }
 
       /* ── Section label ── */
@@ -822,82 +820,100 @@
       .section-label span { font-size: 0.61rem; }
 
       /* ── Grille cartes ── */
-      .cards {
-        grid-template-columns: 1fr;
-        gap: 0.55rem;
-      }
+      .cards { grid-template-columns: 1fr; gap: 0.5rem; }
 
-      /* ── Carte : layout colonne propre ── */
+      /* ─────────────────────────────────────
+         CARTE MOBILE — layout compact propre
+         Structure : [card-body-tablet] + [card-footer]
+         card-body-tablet : [icon | title] + [desc-mobile]
+      ───────────────────────────────────── */
       .card {
         flex-direction: column !important;
         align-items: stretch;
-        padding: 0.9rem 1rem;
+        padding: 0.85rem 1rem;
+        /* Supprime le gap hérité desktop — on gère les espacements manuellement */
         gap: 0;
         min-width: 0;
         overflow: hidden;
       }
 
-      /* Masque les éléments non pertinents */
-      .card-number-bg { display: none; }
-      .step-badge { display: none; }
-      .card-howto { display: none; }
+      /* Masque tout ce qui ne sert pas sur mobile */
+      .card-number-bg,
+      .step-badge,
+      .card-howto,
       .card-desc { display: none; }
 
-      /* Ligne 1 : icône + titre côte à côte ; desc passe à la ligne auto */
+      /* Wrapper principal — flex-row pour icône+titre, avec wrap pour la desc */
       .card-body-tablet {
         display: flex;
         flex-direction: row;
         align-items: center;
+        /* wrap permet à card-desc-mobile (flex-basis:100%) de passer à la ligne */
         flex-wrap: wrap;
-        gap: 0.55rem;
+        /* gap uniquement horizontal entre icône et titre ; vertical géré via margin-top */
+        column-gap: 0.5rem;
+        row-gap: 0;
         min-width: 0;
         width: 100%;
       }
 
       .card-icon {
-        font-size: 1.25rem;
+        font-size: 1.2rem;
         flex-shrink: 0;
-        display: block;
         line-height: 1;
         margin-bottom: 0;
+        display: block;
+        /* Alignement vertical parfait avec le titre */
         align-self: center;
       }
 
       .card-title {
-        font-size: 0.98rem;
+        font-size: 0.95rem;
         margin-bottom: 0;
-        line-height: 1.1;
+        line-height: 1.15;
         min-width: 0;
+        /* Prend tout l'espace horizontal restant, sans déborder */
         flex: 1;
+        /* Empêche un titre très long de faire déborder la carte */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
-      /* Description courte visible — forcée sur une nouvelle ligne */
+      /* Description — flex-basis:100% la force sur une nouvelle ligne */
       .card-desc-mobile {
         display: block;
         flex-basis: 100%;
-        font-size: 0.72rem;
-        line-height: 1.45;
-        color: rgba(245,240,232,0.5);
+        font-size: 0.71rem;
+        line-height: 1.42;
+        color: rgba(245,240,232,0.48);
         font-weight: 300;
-        margin-top: 0;
-        /* Réduit le gap hérité du parent pour coller visuellement au titre */
-        margin-left: 0;
+        /* Indent aligné avec le titre : icône (1.2rem) + gap (0.5rem) */
+        padding-left: calc(1.2rem + 0.5rem);
+        margin-top: 0.28rem;
+        box-sizing: border-box;
       }
 
-      /* Footer discret : stat masquée, arrow conservée */
+      /* Footer — arrow discrète collée en bas, sans espace flottant */
       .card-footer {
         display: flex;
         justify-content: flex-end;
         align-items: center;
         border-top: none;
-        padding-top: 0.45rem;
-        margin-top: 0.3rem;
+        padding-top: 0;
+        margin-top: 0.55rem;
+        /* Supprime le margin-top: auto qui étire la carte */
       }
       .card-stat { display: none; }
-      .card-arrow { font-size: 0.85rem; opacity: 0.35; }
+      .card-arrow {
+        font-size: 0.78rem;
+        opacity: 0.28;
+        /* Désactive l'animation hover sur mobile */
+        transition: none;
+      }
 
       /* ── Méthode strip ── */
-      .methode-item { padding: 0.58rem 0.8rem; }
+      .methode-item { padding: 0.55rem 0.8rem; }
       .methode-title { font-size: 0.73rem; }
 
       /* ── Footer ── */
@@ -969,16 +985,16 @@
 
 <div class="deco-line"></div>
 
-<div class="page">
-
-  <!-- Bandeau objectif -->
-  <div class="objective-banner">
-    <div class="objective-left">
-      <span class="objective-badge">Méthode DCG</span>
-      <span class="objective-title">UE 5 — Économie</span>
-    </div>
-    <span class="objective-promise">Gagnez jusqu'à <strong>+4 points</strong> au-dessus de la moyenne nationale à l'épreuve</span>
+<!-- Bandeau objectif — hors container, pleine largeur naturelle -->
+<div class="objective-banner">
+  <div class="objective-left">
+    <span class="objective-badge">Méthode DCG</span>
+    <span class="objective-title">UE 5 — Économie</span>
   </div>
+  <span class="objective-promise">Gagnez jusqu'à <strong>+4 points</strong> au-dessus de la moyenne nationale à l'épreuve</span>
+</div>
+
+<div class="page">
 
   <header>
     <span class="logo">Objectif : Valider l'UE5 du DCG !</span>
