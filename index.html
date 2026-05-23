@@ -699,6 +699,23 @@
       display: none; /* supprimée : incompatible avec max-width centré */
     }
 
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.76rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      border: 1px solid rgba(201,168,76,0.35);
+      border-radius: 3px;
+      padding: 0.38rem 0.85rem;
+      transition: background 0.2s ease, border-color 0.2s ease;
+      white-space: nowrap;
+    }
+    .nav-link:hover { background: rgba(201,168,76,0.08); border-color: rgba(201,168,76,0.65); }
+
     .contact-btn {
       display: inline-flex;
       align-items: center;
@@ -861,8 +878,9 @@
     <span class="logo">Objectif : Valider l'UE5 du DCG !</span>
     <div class="header-right">
       <span class="tagline">Économie — 18 chapitres</span>
+      <a href="about.html" class="nav-link">À propos</a>
       <a href="contact.html" class="contact-btn">
-        <span class="contact-btn-long">✉ Besoin d'aide ? Contactez-moi</span>
+        <span class="contact-btn-long">✉ Contactez-moi</span>
         <span class="contact-btn-short">✉ Contact</span>
       </a>
     </div>
