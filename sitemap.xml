@@ -14,6 +14,24 @@
   </url>
 
   <url>
+    <loc>https://methodedcg-ue5.fr/epreuve-ue5-dcg.html</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://methodedcg-ue5.fr/dossier-documentaire-ue5-dcg.html</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
+    <loc>https://methodedcg-ue5.fr/question-problematisee-dcg-ue5.html</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <url>
     <loc>https://methodedcg-ue5.fr/about.html</loc>
     <priority>0.6</priority>
     <changefreq>monthly</changefreq>
