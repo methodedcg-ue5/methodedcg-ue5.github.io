@@ -37,21 +37,25 @@
       --paper: #faf7f2;
     }
 
-    html {
+    html, body {
+      /* Pas d'overflow-x:hidden ici — Safari iOS l'ignore sur html/body */
       width: 100%;
-      max-width: 100%;
-      overflow-x: hidden;
-    }
-    body {
-      width: 100%;
-      max-width: 100%;
       height: 100%;
       background: var(--paper);
       color: var(--ink);
       font-family: 'DM Sans', sans-serif;
+    }
+
+    /* ── Wrapper de confinement — SEUL endroit où bloquer l'overflow Safari ── */
+    /* Safari respecte overflow-x:hidden sur un div enfant, pas sur body       */
+    #site-wrapper {
+      width: 100%;
+      max-width: 100%;
       overflow-x: hidden;
-      /* Ancre les éléments positionnés au viewport, évite les glissements Safari */
+      /* Crée un contexte d'empilement isolé — confine tous les enfants */
       position: relative;
+      /* Isole les repaints Safari liés aux animations */
+      isolation: isolate;
     }
     /* Protection universelle : tous les médias restent dans leur conteneur */
     img, svg, video, iframe, embed, object {
@@ -83,7 +87,6 @@
       margin-right: auto;
       padding: 0 clamp(1.25rem, 4vw, 4rem);
       box-sizing: border-box;
-      overflow-x: hidden;
     }
 
     /* ── Bandeau objectif — pleine largeur, hors container ── */
@@ -1071,6 +1074,7 @@
 
 </head>
 <body>
+<div id="site-wrapper">
 
 <div class="deco-line"></div>
 
@@ -1233,6 +1237,8 @@
     </nav>
   </footer>
 </div>
+
+</div><!-- /#site-wrapper -->
 
 <!-- ── Bannière cookies ── -->
 <div id="cookie-banner" role="dialog" aria-label="Gestion des cookies">
