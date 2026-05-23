@@ -37,22 +37,34 @@
       --paper: #faf7f2;
     }
 
-    html, body {
+    html {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    body {
+      width: 100%;
+      max-width: 100%;
       height: 100%;
       background: var(--paper);
       color: var(--ink);
       font-family: 'DM Sans', sans-serif;
-      /* hidden : support universel Safari iOS toutes versions */
       overflow-x: hidden;
+      /* Ancre les éléments positionnés au viewport, évite les glissements Safari */
+      position: relative;
     }
-    /* Sécurité globale : aucun élément ne peut dépasser la largeur du viewport */
-    html { max-width: 100%; }
+    /* Protection universelle : tous les médias restent dans leur conteneur */
+    img, svg, video, iframe, embed, object {
+      max-width: 100%;
+      height: auto;
+    }
 
     /* Texture de fond subtile */
     body::before {
       content: '';
       position: fixed;
-      inset: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
+      width: 100%; max-width: 100%; overflow: hidden;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
       pointer-events: none;
       z-index: 999;
@@ -65,14 +77,12 @@
       display: grid;
       grid-template-rows: auto auto 1fr auto;
       width: 100%;
-      max-width: 1280px;
-      /* Sécurité Safari iOS : jamais plus large que le viewport */
+      max-width: min(1280px, 100%);
       min-width: 0;
       margin-left: auto;
       margin-right: auto;
-      padding: 0 clamp(1.5rem, 5vw, 4rem);
+      padding: 0 clamp(1.25rem, 4vw, 4rem);
       box-sizing: border-box;
-      /* Contient les overflows de ses enfants */
       overflow-x: hidden;
     }
 
@@ -610,51 +620,59 @@
     }
 
     /* ══════════════════════════════════════════════════════
-       DESKTOP : layout row pour le hero (≥ 781px)
+       DESKTOP : hero en grille éditoriale équilibrée (≥ 781px)
     ══════════════════════════════════════════════════════ */
     @media (min-width: 781px) {
       .hero {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        gap: 2.5rem;
-        padding: 1.2rem 0 0;
+        /* Grille 2 colonnes — ratio légèrement dominant à gauche */
+        display: grid;
+        grid-template-columns: 1.1fr 1fr;
+        gap: 3rem;
+        /* Ancrage haut des deux colonnes — évite le flottement de la droite */
+        align-items: start;
+        padding: 1.4rem 0 0;
+        min-width: 0;
       }
 
       .hero-left {
-        flex: 0 0 auto;
-        max-width: 42%;
+        min-width: 0;
       }
 
       .hero-right {
-        flex: 1;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        /* Descente visuelle : la desc s'aligne avec le bas du sous-titre H1 */
+        padding-top: 2.8rem;
+        min-width: 0;
         gap: 0;
       }
 
       h1 {
-        font-size: clamp(1.8rem, 3.2vw, 2.8rem);
-        line-height: 1.0;
-        margin-bottom: 0.25rem;
+        font-size: clamp(1.8rem, 3vw, 2.8rem);
+        line-height: 1.02;
+        margin-bottom: 0.2rem;
       }
       .h1-sub {
-        font-size: clamp(0.9rem, 1.6vw, 1.2rem);
-        margin-top: 0.35rem;
+        font-size: clamp(0.88rem, 1.5vw, 1.15rem);
+        margin-top: 0.4rem;
+        /* Limite la largeur pour ne pas concurrencer le titre */
+        max-width: 90%;
       }
 
-      .hero-sub { margin-bottom: 0.4rem; }
+      .hero-sub { margin-bottom: 0.35rem; }
 
       .hero-desc {
         font-size: 0.85rem;
-        line-height: 1.6;
-        max-width: 58ch;
+        line-height: 1.65;
+        /* Largeur fixe pour une lisibilité optimale */
+        max-width: 480px;
+        margin-top: 0;
       }
 
-      .chapter-btn { margin-top: 0.75rem; }
+      .chapter-btn { margin-top: 1rem; }
 
-      .section-label { margin-top: 1.4rem; margin-bottom: 0.6rem; }
+      .section-label { margin-top: 1.6rem; margin-bottom: 0.6rem; }
     }
 
     /* ══════════════════════════════════════════════════════
@@ -663,7 +681,8 @@
        via une media query orientée hauteur viewport
     ══════════════════════════════════════════════════════ */
     @media (min-width: 781px) and (max-height: 820px) {
-      .hero { padding: 0.8rem 0 0; }
+      .hero { padding: 0.7rem 0 0; gap: 2rem; }
+      .hero-right { padding-top: 2.2rem; }
       h1 { font-size: clamp(1.5rem, 2.8vw, 2.2rem); }
       .section-label { margin-top: 1rem; margin-bottom: 0.45rem; }
       .cards { gap: 0.9rem; }
@@ -715,8 +734,15 @@
       .nav-link,
       .contact-btn { font-size: 0.63rem; padding: 0.28rem 0.6rem; letter-spacing: 0.04em; }
 
-      /* Hero */
-      .hero { padding: 1rem 0 0; flex-direction: column; }
+      /* Hero : repasse en colonne sur tablette */
+      .hero {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 1rem 0 0;
+        gap: 0.75rem;
+      }
+      .hero-right { padding-top: 0; }
       .hero-sub { font-size: 0.68rem; margin-bottom: 0.4rem; }
       h1 { font-size: clamp(1.6rem, 7.5vw, 2.3rem); line-height: 1.0; overflow-wrap: break-word; }
       .h1-sub { font-size: clamp(0.88rem, 3.5vw, 1.1rem); margin-top: 0.3rem; }
@@ -838,7 +864,8 @@
       .contact-btn { font-size: 0.58rem; padding: 0.22rem 0.48rem; letter-spacing: 0.03em; }
 
       /* ── Hero ── */
-      .hero { padding: 0.85rem 0 0; gap: 0; }
+      .hero { padding: 0.85rem 0 0; gap: 0; display: flex; flex-direction: column; }
+      .hero-right { padding-top: 0; }
       h1 { font-size: clamp(1.45rem, 8.5vw, 1.9rem); line-height: 1.02; overflow-wrap: break-word; }
       .h1-sub { font-size: clamp(0.82rem, 3.8vw, 1rem); margin-top: 0.28rem; letter-spacing: 0; }
       .hero-desc { font-size: 0.78rem; line-height: 1.55; margin-top: 0.35rem; max-width: 100%; }
