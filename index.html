@@ -162,7 +162,7 @@
     }
 
     /* Tous les enfants directs de .page restent dans le content box */
-    header, main, footer, .hero, .section-label, .cards, .methode-strip {
+    header, main, footer, .hero, .section-label, .cards, .cards-games, .tools-wrapper, .methode-strip {
       width: 100%;
       max-width: 100%;
       min-width: 0;
@@ -303,15 +303,92 @@
     /* ═══════════════════════════════════════════════
        OUTILS PRINCIPAUX — cartes denses, above the fold
     ═══════════════════════════════════════════════ */
+
+    /* Conteneur global — empile les deux lignes */
+    .tools-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      animation: fadeUp 0.8s 0.22s ease both;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    /* Ligne 1 : 3 cartes principales */
     .cards {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1.2rem;
-      padding-bottom: 0;
-      animation: fadeUp 0.8s 0.22s ease both;
-      /* Grid children ne débordent pas */
       width: 100%;
       max-width: 100%;
+    }
+    .cards-games {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.2rem;
+      width: calc(66.666% + 0.4rem); /* ~largeur de 2 cartes + gap intermédiaire */
+      max-width: 100%;
+      /* Centrage horizontal */
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── Cartes jeux compactes — même ADN visuel, gabarit réduit ── */
+    .cards-games .card {
+      padding: 1.1rem 1.4rem 1rem;
+    }
+
+    .cards-games .card-icon {
+      font-size: 1.1rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .cards-games .card-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.25rem;
+    }
+
+    /* On masque la description longue : les chips suffisent */
+    .cards-games .card-desc {
+      display: none;
+    }
+
+    .cards-games .card-howto {
+      margin-bottom: 0.65rem;
+    }
+
+    .cards-games .card-number-bg {
+      font-size: 3rem;
+      bottom: 2rem;
+    }
+
+    .cards-games .game-badge {
+      margin-bottom: 0.6rem;
+    }
+
+    .cards-games .card-footer {
+      padding-top: 0.55rem;
+    }
+
+    /* Badge "Jeu" — variante dorée sobre pour les nouvelles cartes */
+    .game-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.58rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(201,168,76,0.6);
+      font-weight: 500;
+      margin-bottom: 0.9rem;
+    }
+    .game-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: 0.55;
+      flex-shrink: 0;
     }
 
     .card {
@@ -726,7 +803,9 @@
       .hero-right { padding-top: 2.2rem; }
       h1 { font-size: clamp(1.5rem, 2.8vw, 2.2rem); }
       .section-label { margin-top: 1rem; margin-bottom: 0.45rem; }
+      .tools-wrapper { gap: 0.9rem; }
       .cards { gap: 0.9rem; }
+      .cards-games { gap: 0.9rem; }
       .card { padding: 1.2rem 1.3rem 1.1rem; }
       .card-icon { font-size: 1.1rem; margin-bottom: 0.4rem; }
       .card-title { font-size: 1.3rem; }
@@ -805,6 +884,15 @@
         padding-bottom: 0;
       }
 
+      /* Jeux : 1 colonne aussi, pleine largeur sur tablette */
+      .cards-games {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+        width: 100%;
+      }
+
+      .tools-wrapper { gap: 0.75rem; }
+
       /* Sur tablette : card en mode horizontal compact */
       .card {
         flex-direction: row;
@@ -831,6 +919,7 @@
 
       /* Sur tablette on masque step-badge et chips pour compacité */
       .step-badge { display: none; }
+      .game-badge { display: none; }
       .card-howto { display: none; }
 
       .card-title { font-size: 1.15rem; margin-bottom: 0.15rem; }
@@ -929,6 +1018,8 @@
 
       /* ── Grille cartes ── */
       .cards { grid-template-columns: 1fr; gap: 0.5rem; }
+      .cards-games { grid-template-columns: 1fr; gap: 0.5rem; width: 100%; }
+      .tools-wrapper { gap: 0.5rem; }
 
       /* ─────────────────────────────────────
          CARTE MOBILE — layout compact propre
@@ -1178,6 +1269,8 @@
       <span>Outils de révision</span>
     </div>
 
+    <div class="tools-wrapper">
+
     <div class="cards">
 
       <!-- Cartes mentales — étape 1 -->
@@ -1243,7 +1336,58 @@
         </div>
       </a>
 
-    </div>
+    </div><!-- /.cards -->
+
+    <!-- Jeux pédagogiques — ligne 2, 2 cartes centrées -->
+    <div class="cards-games">
+
+      <!-- Frise chronologique -->
+      <a href="#" class="card" aria-label="Frise chronologique — bientôt disponible">
+        <div class="game-badge"><span class="game-dot"></span>Jeu pédagogique</div>
+        <span class="card-number-bg">◇</span>
+        <div class="card-body-tablet">
+          <span class="card-icon">📅</span>
+          <h2 class="card-title">Frise chronologique</h2>
+          <p class="card-desc">Reliez auteurs, événements et courants économiques dans le temps pour mieux comprendre l'évolution de la pensée économique.</p>
+          <p class="card-desc-mobile">Situez auteurs et courants économiques dans le temps.</p>
+          <div class="card-howto">
+            <span class="howto-chip">Auteurs</span>
+            <span class="howto-chip">Courants</span>
+            <span class="howto-chip">Événements</span>
+            <span class="howto-chip">Chronologie</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-stat">Bientôt disponible</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+      <!-- Qui suis-je ? -->
+      <a href="#" class="card" aria-label="Qui suis-je ? — bientôt disponible">
+        <div class="game-badge"><span class="game-dot"></span>Jeu pédagogique</div>
+        <span class="card-number-bg">◇</span>
+        <div class="card-body-tablet">
+          <span class="card-icon">🔎</span>
+          <h2 class="card-title">Qui suis-je ?</h2>
+          <p class="card-desc">Devinez les économistes, concepts et théories à partir d'indices progressifs et de défis interactifs.</p>
+          <p class="card-desc-mobile">Identifiez économistes et théories à partir d'indices progressifs.</p>
+          <div class="card-howto">
+            <span class="howto-chip">Indices</span>
+            <span class="howto-chip">Économistes</span>
+            <span class="howto-chip">Théories</span>
+            <span class="howto-chip">Défis</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-stat">Bientôt disponible</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </a>
+
+    </div><!-- /.cards-games -->
+
+    </div><!-- /.tools-wrapper -->
 
   </main>
 
