@@ -1072,11 +1072,12 @@
         line-height: 1.15;
         min-width: 0;
         flex: 1;
-        /* Retour à la ligne propre plutôt que nowrap — future-proof */
         overflow-wrap: break-word;
         word-break: break-word;
-        /* Pas de white-space: nowrap — un titre long ne déborde plus */
       }
+
+      /* Forcer la même taille pour les cartes jeux sur mobile */
+      .cards-games .card-title { font-size: 0.95rem; }
 
       /* Description — flex-basis:100% la force sur une nouvelle ligne */
       .card-desc-mobile {
